@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <table name="t_user">
+        <column>user_id</column>
+        <column>user_name</column>
+        <column>credits</column>
+        <column>password</column>
+        <column>last_visit</column>
+        <column>last_ip</column>
+        <row>
+            <value>1</value>
+            <value>jan</value>
+            <value>10</value>
+            <value>123456</value>
+            <value>2011/6/6</value>
+            <value>127.0.0.1</value>
+        </row>
+    </table>
+</dataset>
