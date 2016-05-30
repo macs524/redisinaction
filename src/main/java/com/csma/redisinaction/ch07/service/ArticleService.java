@@ -21,4 +21,19 @@ public interface ArticleService {
      * @return 文章列表
      */
     List<Article> list(int index);
+
+    /**
+     * 根据ID列表查找对应的文章信息
+     * @param articleIds ID列表
+     * @return 文章信息
+     */
+    List<Article> getArticlesByIds(List<String> articleIds);
+
+    /**
+     * 删除某篇文章
+     * @param articleId 文章ID
+     * @return 结果
+     */
+    boolean deleteById(Long articleId);
+    Article getById(Long articleId);
 }

@@ -23,30 +23,14 @@
             <div class="col-lg-10">
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">文章列表</div>
+                    <div class="panel-heading">搜索结果如下：</div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
-                        <div>
-                            <form class="form-horizontal  container-fluid one-line-form"
-                                  id="searchForm" name="searchForm" method="post"
-                                  action="<c:url value="/article/searchArticle" />">
-                                <div class="row">
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label" for="keywords">关键词</label>
-
-                                        <div class="col-md-4">
-                                            <input type="text" class="form-control" id="keywords"
-                                                   name="keywords"/>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <input type="submit" class="btn btn-primary" value="搜索"
-                                                   style="margin-right: 10px" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
                         <div class="dataTable_wrapper">
+                            <p>
+                                关键词：${keywords}
+
+                            </p>
                             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                 <tr>
@@ -58,7 +42,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${list}" var="item">
+                                <c:forEach items="${pageableResult.itemList}" var="item">
                                     <c:set var="articleId" value="${item.id}"/>
                                     <tr>
                                         <td>
@@ -73,7 +57,7 @@
                                         </td>
                                         <td>
                                             <a href="<c:url value='/article/detail?id=${articleId}' />">View</a> |
-                                            <a href="<c:url value='/article/deleteNews?id=${articleId}' />">Delete</a>
+                                            <a href="<c:url value='/article/view?id=${articleId}' />">Delete</a>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -81,7 +65,7 @@
                             </table>
 
                             <p>
-                                <a href="<c:url value='/article/addNew' />">添加新文章</a>
+                                <a href="<c:url value='/article/list' />">返回列表</a>
                             </p>
                         </div>
                         <!-- /.table-responsive -->

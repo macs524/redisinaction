@@ -22,10 +22,6 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
-    <mvc:interceptors>
-        <bean class="com.baobaotao.interceptor.LoggerHandlerInterceptor" />
-    </mvc:interceptors>
-    
     <mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
     <mvc:resources mapping="/css/**" location="/WEB-INF/css/" />
 

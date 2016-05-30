@@ -1,5 +1,7 @@
 package com.csma.redisinaction.ch07.service;
 
+import com.csma.redisinaction.ch07.entity.Article;
+
 import java.util.Set;
 
 /**
@@ -14,5 +16,5 @@ public interface IndexService {
      * @return 抽取后的token
      */
     Set<String> tokenize(String content);
-    void indexDocument();
+    void indexDocument(Article article);
 }

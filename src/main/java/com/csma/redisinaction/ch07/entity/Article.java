@@ -1,6 +1,7 @@
 package com.csma.redisinaction.ch07.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 文章实体类
@@ -10,7 +11,7 @@ public class Article implements Serializable {
 
     private Long id;
     private String author;
-    private Long createdTime;
+    private Date createdTime;
     private String content;
     private String title;
 
@@ -30,11 +31,11 @@ public class Article implements Serializable {
         this.author = author;
     }
 
-    public Long getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Long createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 

@@ -1,7 +1,5 @@
 package com.csma.redisinaction.ch07.controller;
 
-//import com.baobaotao.service.ArticleService;
-
 import com.csma.redisinaction.ch07.entity.Article;
 import com.csma.redisinaction.ch07.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +45,24 @@ public class ArticleController {
         return "addNew";
     }
 
+    @RequestMapping(value = "detail", method = RequestMethod.GET)
+    public String viewNews(Long id, Model model){
+
+        Article article = articleService.getById(id);
+
+        model.addAttribute("article", article);
+
+        return "viewNews";
+    }
+
+    @RequestMapping(value = "deleteNews", method = RequestMethod.GET)
+    public String deleteNews(Long id){
+
+        articleService.deleteById(id);
+
+        return "redirect:list";
+    }
+
     /**
      * 添加文章
      * @param author author
@@ -54,14 +70,16 @@ public class ArticleController {
      * @return result
      */
     @RequestMapping(value="addNew", method = RequestMethod.POST)
-    public String doAddNew(String author, String content){
-        if(author == null || content == null){
+    public String doAddNew(String author, String content, String title){
+        if(author == null || content == null || title == null){
             return "redirect:addNew";
         }
 
         Article article = new Article();
         article.setContent(content);
         article.setAuthor(author);
+        article.setTitle(title);
+
         articleService.add(article);
 
         return "redirect:list";

@@ -2,6 +2,7 @@ package com.csma.redisinaction.ch07.service.impl;
 
 import com.csma.redisinaction.ch07.entity.Article;
 import com.csma.redisinaction.ch07.service.ArticleService;
+import com.csma.redisinaction.ch07.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private IndexService indexService;
 
     /**
      * 添加文章
@@ -34,14 +37,15 @@ public class ArticleServiceImpl implements ArticleService {
             Long lngId = Long.valueOf(redisTemplate.opsForValue().get("article:id"));
 
             article.setId(lngId);
-            article.setCreatedTime(System.currentTimeMillis());
+            long createdTime = System.currentTimeMillis();
+            article.setCreatedTime(new Date(createdTime));
 
             Map<String, String> articleMap =
                     new HashMap<String, String>();
 
             articleMap.put("author", article.getAuthor());
             articleMap.put("content", article.getContent());
-            articleMap.put("createdTime", article.getCreatedTime() + "");
+            articleMap.put("createdTime", createdTime + "");
             articleMap.put("title", article.getTitle());
 
 
@@ -50,7 +54,10 @@ public class ArticleServiceImpl implements ArticleService {
 
             //存到有序列表里
             redisTemplate.opsForZSet().add("article:list",
-                    lngId + "", article.getCreatedTime());
+                    lngId + "", createdTime);
+
+            //建索引
+            indexService.indexDocument(article);
 
             return true;
         }
@@ -69,26 +76,64 @@ public class ArticleServiceImpl implements ArticleService {
                 redisTemplate.opsForZSet().reverseRange("article:list",
                 index + 1, index + 20);
 
+        return getArticlesByIds(new ArrayList<String>(articleIds));
+    }
+
+    public List<Article> getArticlesByIds(List<String> articleIds){
+
         List<Article> articleList = new ArrayList<Article>();
 
         if(articleIds != null){
             for(String articleId : articleIds){
-                Map<Object, Object> articleMap
-                        = redisTemplate.opsForHash().entries("article:info:" + articleId);
 
-                if(articleMap != null){
-                    Article article = new Article();
-                    article.setId(Long.valueOf(articleId));
-                    article.setAuthor(articleMap.get("author").toString());
-                    article.setContent(articleMap.get("content").toString());
-                    article.setTitle(articleMap.get("title").toString());
-                    article.setCreatedTime(Long.valueOf(articleMap.get("createdTime").toString()));
-
+                Article article = getById(Long.valueOf(articleId));
+                if(article != null){
+                    if(article.getContent().length() > 20){
+                        article.setContent(article.getContent().substring(0, 20) + "...");
+                    }
                     articleList.add(article);
-
                 }
             }
         }
+
         return articleList;
     }
+
+    /**
+     * 删除某篇文章
+     *
+     * @param articleId 文章ID
+     * @return 结果
+     */
+    public boolean deleteById(Long articleId) {
+
+        String articleKey = "article:info:" + articleId;
+        if(redisTemplate.hasKey(articleKey)){
+            redisTemplate.delete(articleKey);
+            redisTemplate.opsForZSet().remove("article:list", articleId + "");
+
+            return true;
+        }
+        return false;
+    }
+
+    public Article getById(Long articleId) {
+        Map<Object, Object> articleMap
+                = redisTemplate.opsForHash().entries("article:info:" + articleId);
+
+        Article article = null;
+        if(!articleMap.isEmpty()){
+            article = new Article();
+            article.setId(articleId);
+            article.setAuthor(articleMap.get("author").toString());
+
+            String content = articleMap.get("content").toString();
+            article.setContent(content);
+            article.setTitle(articleMap.get("title").toString());
+            article.setCreatedTime(new Date(Long.valueOf(articleMap.get("createdTime").toString())));
+        }
+
+        return article;
+    }
+
 }

@@ -30,7 +30,7 @@
                             <!-- row one -->
                             <div class="row">
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label" for="title">文章标题</label>
+                                    <label class="col-md-2 control-label" for="title">文章标题</label>
 
                                     <div class="col-md-5">
                                         <input type="text" class="form-control" id="title" name="title"/>
@@ -39,7 +39,7 @@
                             </div>
                             <div class="row">
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label" for="author">作者</label>
+                                    <label class="col-md-2 control-label" for="author">作者</label>
 
                                     <div class="col-md-5">
                                         <input type="text" class="form-control" id="author" name="author"/>
@@ -48,7 +48,7 @@
                             </div>
                             <div class="row">
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">文章内容</label>
+                                    <label class="col-md-2 control-label">文章内容</label>
 
                                     <div class="col-md-9">
                                         <textarea class="form-control" id="content" name="content" rows="4" cols="16"></textarea>
@@ -59,7 +59,7 @@
                             <!-- valid term end -->
                             <div class="row" style="margin-bottom: 10px">
                                 <div class="col-md-3">&nbsp;</div>
-                                <span id="operationMsg">&nbsp;</span>
+                                <span id="operationMsg" style="color: red">&nbsp;</span>
                             </div>
 
                             <div class="row">
